@@ -6,32 +6,41 @@ author:
   email: pietro@bertera.it
 
 date: Jul 2014
-abstract: A simple writing workflow using markdown, GNU/Make, convert and pandoc.
+abstract: A simple writing workflow using markdown, GNU/Make, convert, pandoc and a few lines of Bash.
 ...
 
 # A Markdown workflow for writing documents
 
 ## Why Markdown ?
 
-* [Markdown](http://en.wikipedia.org/wiki/Markdown) is a simple formatting syntax, the syntax is very simple and powerful, markdown has a flat learning curve
+* [Markdown](http://en.wikipedia.org/wiki/Markdown) is a simple and powerful formatting syntax, markdown has a flat learning curve
 
-* Markdown saves time (and money): writing in markdown is fast: you don't must fight with a complicated syntax (read: LaTeX) nor you will never lose in a deep and deep XML tree (read: Docbook) and you will never need a buggy WYSIWYG editor.
+* Markdown saves time (and money): writing in markdown is fast: you musn't fight with a complicated syntax (read: LaTeX) nor you will never feel lost in a deep and deep XML tree (read: Docbook) and you will never need an heavy and buggy WYSIWYG editor.
 
-* Markdown is plaintext, so you can use your preferred text editor and showing differences between documents is easy and you can use some tool (diff).
+* Markdown is plaintext, so you can use your preferred text editor: showing differences between documents is easy and you can use some tool (diff). Your document can be easily managed by any SCM tool (GIT, SVN, CVS, ...)
 
-* Markdown is portable: you can write your docs in your smartphone, in your web editor or in your standalone application.
+* Markdown is portable: you can write your docs in your smartphone, in your web editor or in your standalone application. Your markdown files will never be obsolete or unsupported.
 
-* Markdown is human readable: also without any rendering process a markdown is clean and easy to understand
+* Markdown is human readable: also without any rendering process a markdown file is clean and easy to understand.
 
-* Markdown is flexible: you can easily convert a Markdown document into an HTML, a PDF a DOCX or whatever in a few simple step
+* Markdown is flexible: you can easily convert a Markdown document into an HTML, a PDF a DOCX or whatever in a few simple step and using numerous tools.
 
-* Markdown supports workflows: with some tools and a simple setup you can automatize your writing-release-publish-print-whatever process: you can script the rendering process, or the publishing and so on.
+* Markdown supports workflows: with some tools and a simple setup you can automatize your writing-release-publish-print-backup-upload-whatever process: you can script the rendering process, or the publishing and so on.
 
-## Images resize issue
+# The workflow
 
-A drawback of markdown is that doesn't officially supports an image resize syntax.
+My workflow is based on a Makefile and consist in a few steps:
 
-This limitation can be justified by the fact that often the wanted image size depends on the final document format. If your document is rendered as HTML maybe you want bigger images than in A4 PDF rendering.
+* copy all the markdown files into the *gen/{format}/*
+* convert all images using the appropriate rule (see below) into the *gen/{format}/img/* directory
+* copy all the needed templates into the *gen/{format}/tpl* directory
+* run *pandoc* inside the *gen/{format}/* directory in order to create the output document
+
+# Images resize issue
+
+One of the Markdown drawbacks is that doesn't officially supports an image resize syntax.
+
+This limitation is due by the fact that often the wanted image size depends on the final document format. If your document is rendered as HTML maybe you want bigger images than in A4 PDF rendering.
 
 This limitation can be circumvented using little script and a rule file: the rule file resides along with the file and has a the same name of the image file followed by the suffix `.sizes` E.g.: the image **tls-enforcing.png** has a rule file named **tls-enforcing.png.sizes**.
 
@@ -71,7 +80,7 @@ The following command will be launched:
 
 In case the rule file is missing or he rule file doesn't contains the needed format the image will be copied as is into the destination directory.
 
-## The working tree
+# The working tree
 
 Following my working directory:
 
@@ -107,13 +116,13 @@ Following my working directory:
 | |____template.tex
 ```
 
-## Editing
+# Editing
 
 You can use your [preferred](http://www.vim.org/) text [editor](http://www.gnu.org/software/emacs/), I like to use [Mou](http://mouapp.com/):
 
 ![The mou editor](img/mou.png)
 
-## Generating the output document
+# Generating the output document
 
 The output document can be easily generated trough the *GNU/Make* command:
 
