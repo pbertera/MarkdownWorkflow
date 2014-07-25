@@ -48,7 +48,7 @@ if [ -f "$RULES_FILE" ]; then
     if [ "$FORMAT_RULE" != "nothing" ];then
         # if normat rule not found falback to "ALL" format
         [ -z "$FORMAT_RULE"] && get_format_rule ALL "$RULES_FILE"
-        if [ -n "$FORMAT_RULE" ]; then
+        if [ -n "$FORMAT_RULE" ] && [ "$FORMAT_RULE" != "nothing" ]; then
             d_echo "Found format rule: '$FORMAT_RULE'"
 
             d_echo "Image resizing and copying to '${DEST_DIR}/${DEST_FILE}'"
