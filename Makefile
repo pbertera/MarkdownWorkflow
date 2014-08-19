@@ -12,10 +12,13 @@ PDF_TEMPLATE := $(TPL_DIR)/template.tex
 HTML_TEMPLATE := $(TPL_DIR)/template.html
 HTML_CSS := $(TPL_DIR)/style.css
 PANDOC_OPTS := -r markdown+simple_tables+table_captions+yaml_metadata_block
-PANDOC_PDF_OPTS := -V sansfont=Tahoma -V monofont="Courier New" -V mainfont=Verdana  -V papersize=a5paper -V fontsize=8pt -V lang=english -V documentclass=memoir --toc --chapters -S -s --latex-engine $(LATEX_ENGINE) --template=$(PDF_TEMPLATE)
-
+PANDOC_PDF_OPTS := -V sansfont=Tahoma -V monofont="Courier New" -V mainfont=Verdana  -V papersize=a4paper -V fontsize=8pt -V lang=english -V documentclass=memoir --toc --chapters -S -s --latex-engine $(LATEX_ENGINE) --template=$(PDF_TEMPLATE)
 PANDOC_HTML_OPTS := --toc --chapters -S -s --template=$(HTML_TEMPLATE) --css=$(HTML_CSS)
 PANDOC_DOCX_OPTS := --toc --chapters -S -s
+
+RSYNC_DST=root@ade.bertera.it:/srv/www/vhosts/www.bertera.it/mydocs/
+GREP=pcregrep
+
 
 MARKDOWN := $(wildcard *.md)
 PDF := $(patsubst %.md,$(BUILD_DIR_PDF)/%.pdf,$(MARKDOWN))
@@ -57,6 +60,10 @@ html: checkdirs imagessizes $(HTML)
 
 .PHONY: docx
 docx: checkdirs imagessizes $(DOCX)
+
+.PHONY: check
+check:
+	$(GREP) --color='auto' -n "[\x80-\xFF]" $(MARKDOWN); test $$? -eq 1
 
 # make gen
 $(BUILD_DIR): ; $(MKDIR)
@@ -114,3 +121,6 @@ $(BUILD_DIR_DOCX)/%.docx: $(BUILD_DIR_DOCX)/%.md imagesdocx
 .PHONY: clean
 clean:
 	@rm -rf $(BUILD_DIR)
+
+upload:
+	rsync -avP --exclude .DS_Store --exclude .git --delete . $(RSYNC_DST)
