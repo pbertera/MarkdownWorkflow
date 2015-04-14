@@ -1,0 +1,241 @@
+%%% LaTeX Template: Two column article
+%%%
+%%% Source: http://www.howtotex.com/
+%%% Feel free to distribute this template, but please keep to referal to http://www.howtotex.com/ here.
+%%% Date: February 2011
+
+%%% Preamble
+\documentclass[	DIV=calc,%
+							paper=a4,%
+							fontsize=10pt]{scrartcl}	 					% KOMA-article class
+
+%\usepackage{lipsum}													% Package to create dummy text
+
+\usepackage[italian]{babel}										% English language/hyphenation
+\usepackage[protrusion=true,expansion=true]{microtype}				% Better typography
+\usepackage{amsmath,amsfonts,amsthm}					% Math packages
+\usepackage[pdftex]{graphicx}									% Enable pdflatex
+\usepackage[svgnames]{xcolor}									% Enabling colors by their 'svgnames'
+\usepackage[hang, small,labelfont=bf,up,textfont=it,up]{caption}	% Custom captions under/above floats
+\usepackage{epstopdf}												% Converts .eps to .pdf
+\usepackage{subfig}													% Subfigures
+\usepackage{booktabs}												% Nicer tables
+\usepackage{fix-cm}													% Custom fontsizes
+% let break long bold, italic and uderlied lines
+\usepackage{soul}
+\usepackage[margin=1in]{geometry}
+
+\usepackage[sfdefault]{quattrocento}
+\usepackage[T1]{fontenc}
+
+\usepackage[utf8]{inputenc}
+\usepackage{upquote}
+
+% Overwrite \begin{figure}[htbp] with \begin{figure}[H]
+\usepackage{float}
+\let\origfigure=\figure
+\let\endorigfigure=\endfigure
+\renewenvironment{figure}[1][]{%
+   \origfigure[H]
+}{%
+   \endorigfigure
+}
+
+\definecolor{myblue}{HTML}{69a8d9}
+\definecolor{mygray}{HTML}{666666}
+\definecolor{mygraylight}{HTML}{eeeeee}
+
+\fontencoding {OT1}
+\fontfamily {phv}
+%\usefont{OT1}{phv}{b}{n}
+%\fontseries {m}
+\fontshape {n}
+%\fontsize {11pt} {19pt}
+%\linespread {1}
+\selectfont
+
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+
+$if(highlighting-macros)$
+$highlighting-macros$
+$endif$
+
+\usepackage{graphicx}
+% Redefine \includegraphics so that, unless explicit options are
+% given, the image width will not exceed the width or the height of the page.
+% Images get their normal width if they fit onto the page, but
+% are scaled down if they would overflow the margins.
+\makeatletter
+\def\ScaleWidthIfNeeded{%
+ \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\def\ScaleHeightIfNeeded{%
+  \ifdim\Gin@nat@height>0.9\textheight
+    0.9\textheight
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\setkeys{Gin}{width=\ScaleWidthIfNeeded,height=\ScaleHeightIfNeeded,keepaspectratio}%
+
+
+
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+
+\usepackage{ifxetex,ifluatex}
+\ifxetex
+  \usepackage[setpagesize=false, % page size defined by xetex
+              unicode=false, % unicode breaks when used with xetex
+              xetex]{hyperref}
+\else
+  \usepackage[unicode=true]{hyperref}
+\fi
+\hypersetup{breaklinks=true,
+            bookmarks=true,
+            pdfauthor={$author-meta$},
+            pdftitle={$title-meta$},
+            colorlinks=true,
+            citecolor=$if(citecolor)$$citecolor$$else$myblue$endif$,
+            urlcolor=$if(urlcolor)$$urlcolor$$else$myblue$endif$,
+            linkcolor=$if(linkcolor)$$linkcolor$$else$myblue$endif$,
+            pdfborder={0 0 0}}
+\urlstyle{same}  % don't use monospace font for urls
+% let long URL breaking
+\usepackage[anythingbreaks]{breakurl}
+
+%%% Custom sectioning (sectsty package)
+\usepackage{sectsty}													% Custom sectioning (see below)
+\allsectionsfont{%															% Change font of al section commands
+	\usefont{OT1}{phv}{b}{n}%										% bch-b-n: CharterBT-Bold font
+	\color{myblue}% color
+    \fontsize{20}{25}
+    }
+
+\sectionfont{%																% Change font of \section command
+	\usefont{OT1}{phv}{b}{n}%										% bch-b-n: CharterBT-Bold font
+	\color{myblue}% color
+    \fontsize{20}{25}
+	}
+
+\chapterfont{
+	\usefont{OT1}{phv}{b}{n}%										% bch-b-n: CharterBT-Bold font
+    \color{myblue}
+    }  % sets colour of chapters
+
+%%% Headers and footers
+\usepackage{fancyhdr}												% Needed to define custom headers/footers
+	\pagestyle{fancy}														% Enabling the custom headers/footers
+\usepackage{lastpage}	
+
+% Header (empty)
+\lhead{\emph{$title$}}
+\chead{}
+%\rhead{}
+$if(logo)$
+\rhead{\includegraphics[width=1.5cm]{$logo$}}
+$endif$
+% Footer (you may change this to your own needs)
+\lfoot{\footnotesize {$website$} \copyright\ $copyright$}
+\cfoot{}
+\rfoot{\footnotesize pagina \thepage\ di \pageref*{LastPage}}	% "Page 1 of 2"
+\renewcommand{\headrulewidth}{1pt}
+\renewcommand{\footrulewidth}{1pt}
+\newcommand{\headrulecolor}[1]{\patchcmd{\headrule}{\hrule}{\color{#1}\hrule}{}{}}
+\newcommand{\footrulecolor}[1]{\patchcmd{\footrule}{\hrule}{\color{#1}\hrule}{}{}}
+\footrulecolor{mygray}
+\headrulecolor{mygray}
+
+% abstract environment
+
+\usepackage{tcolorbox}
+%\colorlet{shadecolor}{mygraylight}
+%\colorlet{framecolor}{myblue}
+%\renewenvironment{abstract}{ %
+%    \def\FrameCommand{\fboxrule=\FrameRule\fboxsep=\FrameSep \fcolorbox{framecolor}{shadecolor}}%
+%    \MakeFramed {\FrameRestore}}%
+%    {\endMakeFramed}
+\renewenvironment{abstract}
+  {\begin{tcolorbox}[colframe=myblue,colback=mygraylight]}
+  {\end{tcolorbox}}
+
+
+%%% Creating an initial of the very first character of the content
+\usepackage{lettrine}
+\newcommand{\initial}[1]{%
+     \lettrine[lines=3,lhang=0.3,nindent=0em]{
+     				\color{DarkGoldenrod}
+     				{\textsf{#1}}}{}}
+
+%%% Title, author and date metadata
+\usepackage{titling}															% For custom titles
+
+\newcommand{\HorRule}{\color{mygray}%			% Creating a horizontal rule
+									  	\rule{\linewidth}{1pt}%
+								}
+
+\pretitle{\vspace{-30pt} \begin{flushleft} %\HorRule 
+				\fontsize{30}{50} \usefont{OT1}{phv}{b}{n} \color{myblue} \selectfont 
+				}
+
+
+$if(title)$
+\title{$title$$if(subtitle)$\\\vspace{0.5em}{\large $subtitle$}$endif$}
+\posttitle{\par\end{flushleft}\vskip 0.5em}
+$endif$
+
+$for(author)$
+$if(author.name)$
+    \preauthor{\begin{flushright}
+	    \large \lineskip 0.5em \usefont{OT1}{phv}{b}{sl} \color{mygray}
+    }
+    \author{$author.company$}
+        \postauthor{\footnotesize \usefont{OT1}{phv}{m}{sl} \color{mygray} 
+		\ $author.name$
+    	\par\end{flushright}
+        \HorRule
+    }
+$endif$
+$endfor$
+
+\date{$date$}
+
+$for(header-includes)$
+$header-includes$
+$endfor$
+
+% no indent for new paragraph and use one line of spacing
+\usepackage[parfill]{parskip}
+
+%%% Begin document
+\begin{document}
+
+$if(title)$
+\maketitle
+$endif$
+$if(abstract)$
+\begin{abstract}
+$abstract$
+\end{abstract}
+$endif$
+
+$for(include-before)$
+$include-before$
+
+$endfor$
+
+\thispagestyle{fancy} 			% Enabling the custom headers/footers for the first page 
+
+$body$
+
+\end{document}
