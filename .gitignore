@@ -1,1 +1,2 @@
-gen
+gen/*/tpl
+gen/*/img

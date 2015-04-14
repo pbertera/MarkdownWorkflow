@@ -29,6 +29,10 @@ copyright: 2015 Bertera Pietro
 
 * Markdown supports [workflows](http://programminghistorian.org/lessons/sustainable-authorship-in-plain-text-using-pandoc-and-markdown): with some tools and a simple setup you can automatize your writing-release-publish-print-backup-upload-whatever process: you can script the rendering process, or the publishing and so on.
 
+## Examples
+
+you can see this README document rendered in [HTML](gen/html/README.html), [PDF](gen/pdf/README.pdf), [DOCX](gen/docx/README.docx) or [LaTeX](gen/docx/README.tex).
+
 ## The workflow
 
 My workflow is based on a Makefile and consist in a few automated steps:

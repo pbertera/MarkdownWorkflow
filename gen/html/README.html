@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <ciccio></ciccio> 
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <title>A Markdown workflow for writing documents</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link rel="stylesheet" href="tpl/style.css">
+</head>
+<body>
+<header>
+<h3 class="date">April 2015</h3>
+
+<h1 class="title">A Markdown workflow for writing documents</h1>
+
+
+<h2 class="author">Pietro Bertera</h2>
+<p class="affilation"><em></em></p>
+<p class="email"><em>email: </em></p>
+
+</header>
+<nav id="TOC">
+<ul>
+<li><a href="#a-markdown-workflow-for-writing-documents">A Markdown workflow for writing documents</a><ul>
+<li><a href="#why-markdown">Why Markdown ?</a></li>
+</ul></li>
+<li><a href="#examples">Examples</a></li>
+<li><a href="#the-workflow">The workflow</a></li>
+<li><a href="#images-resize-issue">Images resize issue</a><ul>
+<li><a href="#example-tls-enforcing.png.sizes">Example: <strong>tls-enforcing.png.sizes</strong></a></li>
+</ul></li>
+<li><a href="#the-working-tree">The working tree</a></li>
+<li><a href="#editing">Editing</a></li>
+<li><a href="#generating-the-output-document">Generating the output document</a></li>
+<li><a href="#needed-tools">Needed tools:</a><ul>
+<li><a href="#imagemagick">ImageMagick</a></li>
+<li><a href="#latex">LaTex</a></li>
+<li><a href="#pandoc">Pandoc</a></li>
+<li><a href="#cool-markdown-editors">Cool Markdown editors:</a></li>
+<li><a href="#web-based-editors">Web-based editors</a></li>
+<li><a href="#previewers">Previewers</a></li>
+</ul></li>
+</ul>
+</nav>
+
+
+<p class="small"><strong>Abstract: </strong><em><p>A plaintex, versionable, flexible authoring workflow using Markdown</p></em></p>
+
+
+
+<h2 id="a-markdown-workflow-for-writing-documents">A Markdown workflow for writing documents</h2>
+<h3 id="why-markdown">Why Markdown ?</h3>
+<ul>
+<li><p><a href="http://en.wikipedia.org/wiki/Markdown">Markdown</a> is a simple and powerful formatting syntax, markdown has a flat learning curve</p></li>
+<li><p>Markdown <a href="http://brettterpstra.com/2011/08/31/why-markdown-a-two-minute-explanation/">saves</a> time (and money): writing in markdown is fast: you musn’t fight with a complicated syntax (read: LaTeX) nor you will never feel lost in a deep and deep XML tree (read: Docbook) and you will never need an heavy and buggy WYSIWYG editor.</p></li>
+<li><p>Markdown is <a href="https://help.github.com/articles/markdown-basics/">plaintext</a>, so you can use your preferred text editor: showing differences between documents is easy and you can use some tool (diff). Your document can be easily managed by any SCM tool (GIT, SVN, CVS, …)</p></li>
+<li><p>Markdown is <a href="http://mashable.com/2013/06/24/markdown-tools/">portable</a>: you can write your docs in your smartphone, in your web editor or in your standalone application. Your markdown files will never be obsolete or unsupported.</p></li>
+<li><p>Markdown is <a href="https://stackedit.io/">human readable</a>: also without any rendering process a markdown file is clean and easy to understand.</p></li>
+<li><p>Markdown is <a href="http://pandoc.org/">flexible</a>: you can easily convert a Markdown document into an HTML, a PDF a DOCX or whatever in a few simple step and using numerous tools.</p></li>
+<li><p>Markdown supports <a href="http://programminghistorian.org/lessons/sustainable-authorship-in-plain-text-using-pandoc-and-markdown">workflows</a>: with some tools and a simple setup you can automatize your writing-release-publish-print-backup-upload-whatever process: you can script the rendering process, or the publishing and so on.</p></li>
+</ul>
+<h2 id="examples">Examples</h2>
+<p>you can see this README document rendered in <a href="gen/html/README.html">HTML</a>, <a href="gen/pdf/README.pdf">PDF</a>, <a href="gen/docx/README.docx">DOCX</a> or <a href="gen/docx/README.tex">LaTeX</a>.</p>
+<h2 id="the-workflow">The workflow</h2>
+<p>My workflow is based on a Makefile and consist in a few automated steps:</p>
+<ul>
+<li>copy all the markdown files into the <em>gen/{format}/</em> (format is your product format (html, pdf, docx, … )</li>
+<li>convert all images using the appropriate rule (see below) into the <em>gen/{format}/img/</em> directory</li>
+<li>copy all the needed templates into the <em>gen/{format}/tpl</em> directory</li>
+<li>run <em>pandoc</em> inside the <em>gen/{format}/</em> directory in order to create the output document</li>
+</ul>
+<h2 id="images-resize-issue">Images resize issue</h2>
+<p>One of the Markdown drawbacks is that doesn’t officially supports an image resizing syntax.</p>
+<p>This limitation is due by the fact that often the wanted image size depends on the final document format. If your document is rendered as HTML maybe you want bigger images than in A4 PDF rendering.</p>
+<p>This limitation can be circumvented using little script and a rule file: the rule file resides along with the file and has a the same name of the image file followed by the suffix <code>.sizes</code> E.g.: the image <strong>tls-enforcing.png</strong> has a rule file named <strong>tls-enforcing.png.sizes</strong>.</p>
+<p>The rule file contains a list of <a href="http://www.imagemagick.org/script/convert.php">convert</a> options grouped by format:</p>
+<h3 id="example-tls-enforcing.png.sizes">Example: <strong>tls-enforcing.png.sizes</strong></h3>
+<pre><code># This is a comment and will be ignored during the parsing
+# The following rule instructs the convert tool to resize 
+# the image to the specified size
+pdf:-resize 400x50
+# The following rule specify a width of 300px for the HTML format
+html:-resize 300
+# All others format should be unchanged
+ALL:</code></pre>
+<h4 id="the-convert-img.sh-script">The <em>convert-img.sh</em> script:</h4>
+<p>This bash script should be launched with 4 command line arguments:</p>
+<ul>
+<li>the image file path</li>
+<li>the needed format</li>
+<li>a directory where the image should copied (after processed by <em>convert</em>)</li>
+</ul>
+<p>When the script runs it search for the rule file, the rule file is parsed against the format and then the convert command is launched with the format specific options.</p>
+<p>So, running the script:</p>
+<p><code>./scripts/onvert-img.sh img/tls-enforcing.png pdf gen/pdf/img</code></p>
+<p>The following command will be launched:</p>
+<p><code>convert -resize 400x50 img/tls-enforcing.png gen/pdf/img/tls-enforcing.png</code></p>
+<p>In case the rule file is missing or the rule file doesn’t contains the needed format the script will search for a fallback rule file named <strong>fallback.sizes</strong>. In case the fallback file is missing image will be copied withouth modifications into the destination directory.</p>
+<h2 id="the-working-tree">The working tree</h2>
+<p>Following my working directory:</p>
+<pre><code>.
+|____img/                           &lt;--- *img*: the image directory          
+| |____tls-unknown.png                   containing all images
+| |____tls-unknown.png.sizes             along with rule files
+| |____8021p.png
+| |____tls-enforcing.png
+| |____tls-enforcing.png.sizes
+| |____vlan-wireshark.png
+| |____fallback.sizes               &lt;--- fallback rules file
+|
+|____Makefile                       &lt;--- the Makefile
+|
+|____Networking.md                  &lt;--- Markdown documents
+|____Security.md
+|____README.md
+|
+|____scripts/                       &lt;--- Scripts directory containing
+| |____convert-img.sh                    the convert-img.sh script 
+|
+|____tpl/                           &lt;--- a template directory containing
+| |____Byword.css                        stylesheets, html templates
+| |____kultiad-serif.css                 LaTeX templates etc...
+| |____latex.template
+| |____latex.tex
+| |____paper.css
+| |____style.css
+| |____template.html
+| |____template.tex</code></pre>
+<h2 id="editing">Editing</h2>
+<p>You can use your <a href="http://www.vim.org/">preferred</a> text <a href="http://www.gnu.org/software/emacs/">editor</a>, I like to use <a href="http://mouapp.com/">Mou</a>:</p>
+<div class="figure">
+<img src="img/mou.png" alt="The mou editor" /><p class="caption">The mou editor</p>
+</div>
+<h2 id="generating-the-output-document">Generating the output document</h2>
+<p>The output document can be easily generated trough the <em>GNU/Make</em> command:</p>
+<p><code>make html</code></p>
+<p>Will generate an HTML document into the gen/html/ directory for each Markdown document into the main directory:</p>
+<pre><code>gen/html/
+|____img
+|    |____tls-unknown.png
+|    |____8021p.png
+|    |____tls-enforcing.png
+|    |____vlan-wireshark.png
+|
+|____tpl
+|    |____style.css
+|    |____template.html
+|
+|____Networking.html
+|____README.html
+|____security.html</code></pre>
+<p>Same thing for <em>make pdf</em> and <em>make docx</em> commands. <em>make all</em> command will export HTML, PDF and DOCX formats.</p>
+<p>You can easily configure the whole workflow editing the <em>Makefile</em> and format templates.</p>
+<h2 id="needed-tools">Needed tools:</h2>
+<h3 id="imagemagick">ImageMagick</h3>
+<p><a href="http://www.imagemagick.org/">ImageMagick</a> s a software suite to create, edit, compose, or convert bitmap images. It can read and write images in a variety of formats (over 200) including PNG, JPEG, JPEG-2000, GIF, TIFF, DPX, EXR, WebP, Postscript, PDF, and SVG. Use ImageMagick to resize, flip, mirror, rotate, distort, shear and transform images, adjust image colors, apply various special effects, or draw text, lines, polygons, ellipses and Bézier curves.</p>
+<p>ImageMagick is used by the <em>convert-img.sh</em> script.</p>
+<h3 id="latex">LaTex</h3>
+<p>You need a full working LaTex environment installed. Nedded packages depends from your LaTex template.</p>
+<h3 id="pandoc">Pandoc</h3>
+<p><a href="http://johnmacfarlane.net/pandoc/">Pandoc</a> is a universal document converter. It works from the command line and you can quickly convert a document between any two formats. These include nearly all formats commonly used for scientific writing such as Word, Markdown, ODT, LaTeX, HTML and RTF.</p>
+<p><a href="http://johnmacfarlane.net/pandoc/installing.html">Download and install pandoc</a></p>
+<h3 id="cool-markdown-editors">Cool Markdown editors:</h3>
+<h4 id="texts">Texts</h4>
+<p><a href="http://www.texts.io">Texts</a> is rich editor for Markdown, with multiple export options (e.g. PDF, Microsoft Word, LaTeX, HTML, ePub) for OS X and Windows.</p>
+<h4 id="byword">ByWord</h4>
+<p><a href="http://www.bywordapp.com">ByWord</a> is a simple text editor for OS X and iOS.</p>
+<h4 id="mou">Mou</h4>
+<p><a href="http://mouapp.com">Mou</a> is a simple, free, and powerful Markdown editor/previewer for OS X.</p>
+<h4 id="markdownpad">MarkdownPad</h4>
+<p><a href="http://markdownpad.com/">MarkdownPad</a> is a Markdown editor for Windows. Both a Free and a Pro version exist; the latter adds support for (amongst other things) GitHub Flavored Markdown and Markdown Extra (including Tables).</p>
+<h4 id="multimarkdown-composer">MultiMarkdown Composer</h4>
+<p>“<a href="http://multimarkdown.com">MultiMarkdown Composer</a> is a text editor for Mac that is designed from the ground up around the MultiMarkdown Syntax. It is designed to make writing in MultiMarkdown (or Markdown) even easier than it already is, with automatic syntax highlighting, built in previews, easy export to any format that is supported by MultiMarkdown, and more!” [http://multimarkdown.com].</p>
+<h4 id="retext">ReText</h4>
+<p><a href="http://sourceforge.net/p/retext/home/ReText/">ReText</a> is an open-source, platform-independent editor for both Markdown and reStructuredText.</p>
+<h4 id="qute">Qute</h4>
+<p><a href="https://github.com/fbreuer/qute">Qute</a>, is an open source, platform-independent editor for Markdown with MathJax-integrated live-preview.</p>
+<h4 id="erato">Erato</h4>
+<p><a href="http://9muses.se/erato/">Erato</a> is a markdown editor for Mac users, supporting GitHub Flavored Markdown, including YAML front matter and task lists.</p>
+<h4 id="editorial">Editorial</h4>
+<p><a href="omz-software.com/editorial/">Editorial</a> is a markdown editor app for iOS users that includes inline markdown preview and is extensible with workflows.</p>
+<h4 id="sublime-text">Sublime Text</h4>
+<p><a href="http://www.sublimetext.com">Sublime Text</a> is a text editor available for OS X, Windows, and Linux. There are packages for working with Markdown and Pandoc, notably <a href="https://packagecontrol.io/packages/MarkdownEditing">MarkdownEditing</a> and <a href="https://packagecontrol.io/packages/Pandown">Pandown</a>.</p>
+<h4 id="atom">Atom</h4>
+<p><a href="https://atom.io/">Atom</a> is a hackable text editor available for Linux, OS X and Windows. It is completely open source, collaboratively developed and maintained is GitHub. It supports <a href="https://help.github.com/articles/github-flavored-markdown/">GitHub Flavored Markdown</a> out of the box.</p>
+<h4 id="brackets">Brackets</h4>
+<p><a href="http://brackets.io/">Brackets</a> is an open source modern text editor available for Linux, OS X and Windows by Adobe. It is collaboratively developed and maintained on GitHub and has over 20,000 stargazers. Brackets supports markdown through</p>
+<p><a href="http://blog.brackets.io/2013/04/23/markdown-extension-for-brackets/?lang=en">Markdown</a> <a href="https://github.com/gruehle/MarkdownPreview">Preview</a> <a href="https://brackets-registry.aboutweb.com/">extension</a>. There is also a <a href="http://baig.github.io/brackets-zotero/">Zotero Integration</a> extension which lets you search and add citation keys in your scholarly markdown documents from your local <a href="https://www.zotero.org/">Zotero</a> library.</p>
+<h3 id="web-based-editors">Web-based editors</h3>
+<h4 id="zupadoc">Zupadoc</h4>
+<p><a href="http://zupadoc.com">Zupadoc</a> is a web-based markdown editor which exports markdown text to typeset PDFs (articles and slides are available). Integrates with Dropbox.</p>
+<h4 id="draft">Draft</h4>
+<p><a href="https://draftin.com">Draft</a> is a web-based markdown editor with cloud sync, image hosting and analytics.</p>
+<h4 id="markable">Markable</h4>
+<p><a href="http://markable.in/">Markable</a> is another web-based markdown editor with export and integration options.</p>
+<h4 id="stackedit">StackEdit</h4>
+<p><a href="https://stackedit.io/editor">StackEdit</a> is another markdown editor with export and publishing options.</p>
+<h4 id="prose.io">Prose.io</h4>
+<p><a href="http://prose.io">Prose</a> is a web-based markdown editor for Github Pages.</p>
+<h4 id="authorea">Authorea</h4>
+<p><a href="https://www.authorea.com/">Authorea</a> is an online collaborative editor to write scientific, academic, and technical documents online and includes markdown and Latex editing.</p>
+<h3 id="previewers">Previewers</h3>
+<h4 id="marked">Marked</h4>
+<p><a href="http://markedapp.com">Marked</a> is a markdown previewer for OS X.</p>
+</body>
+</html>
