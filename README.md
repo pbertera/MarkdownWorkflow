@@ -52,7 +52,7 @@ This limitation can be circumvented using little script and a rule file: the rul
 
 The rule file contains a list of [convert](http://www.imagemagick.org/script/convert.php) options grouped by format:
 
-### Example: **tls-enforcing.png.sizes**
+### Example: tls-enforcing.png.sizes
 
 ```
 # This is a comment and will be ignored during the parsing

@@ -1,0 +1,2 @@
+ALL:-resize 500 -density 72
+pdf:-resize 200> -density 72
