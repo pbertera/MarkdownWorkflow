@@ -31,7 +31,7 @@
 <li><a href="#examples">Examples</a></li>
 <li><a href="#the-workflow">The workflow</a></li>
 <li><a href="#images-resize-issue">Images resize issue</a><ul>
-<li><a href="#example-tls-enforcing.png.sizes">Example: <strong>tls-enforcing.png.sizes</strong></a></li>
+<li><a href="#example-tls-enforcing.png.sizes">Example: tls-enforcing.png.sizes</a></li>
 </ul></li>
 <li><a href="#the-working-tree">The working tree</a></li>
 <li><a href="#editing">Editing</a></li>
@@ -78,7 +78,7 @@
 <p>This limitation is due by the fact that often the wanted image size depends on the final document format. If your document is rendered as HTML maybe you want bigger images than in A4 PDF rendering.</p>
 <p>This limitation can be circumvented using little script and a rule file: the rule file resides along with the file and has a the same name of the image file followed by the suffix <code>.sizes</code> E.g.: the image <strong>tls-enforcing.png</strong> has a rule file named <strong>tls-enforcing.png.sizes</strong>.</p>
 <p>The rule file contains a list of <a href="http://www.imagemagick.org/script/convert.php">convert</a> options grouped by format:</p>
-<h3 id="example-tls-enforcing.png.sizes">Example: <strong>tls-enforcing.png.sizes</strong></h3>
+<h3 id="example-tls-enforcing.png.sizes">Example: tls-enforcing.png.sizes</h3>
 <pre><code># This is a comment and will be ignored during the parsing
 # The following rule instructs the convert tool to resize 
 # the image to the specified size
