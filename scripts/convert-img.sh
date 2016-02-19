@@ -61,7 +61,7 @@ if [ -f "$RULES_FILE" ]; then
             d_echo "Found format rule: '$FORMAT_RULE'"
 
             d_echo "Image resizing and copying to '${DEST_DIR}/${DEST_FILE}'"
-            echo $CONVERT $FORMAT_RULE "$IMAGE_PATH" "${DEST_DIR}/${DEST_FILE}"
+            echo "$CONVERT" $FORMAT_RULE "$IMAGE_PATH" "${DEST_DIR}/${DEST_FILE}"
             $CONVERT $FORMAT_RULE "$IMAGE_PATH" "${DEST_DIR}/${DEST_FILE}"
             exit
         fi
